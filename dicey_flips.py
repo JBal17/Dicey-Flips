@@ -71,7 +71,7 @@ def main():
             die_roll_animation(P1_DIE_LOCATION)
             global number_of_cards
             number_of_cards = random.randint(1,6)
-            die_face = pygame.image.load(f'images\dice\dice-six-faces-{number_of_cards}.png').convert()
+            die_face = pygame.image.load(f'images\dice\dice-six-faces-{number_of_cards}.png').convert_alpha()
             screen.blit(die_face,(P1_DIE_LOCATION))
             pygame.display.flip()
         
@@ -93,10 +93,12 @@ def main():
 
         #display card images for player hand
         for count, card in enumerate(player1.hand):
-            # if card.face_up == True:
-            card = pygame.image.load(f'images\cards\{card.show()}.png').convert()
-            card = pygame.transform.scale(card, (SCALED_IMAGE_SIZE))
-            screen.blit(card, (image_location[count]))
+            # # if card.face_up == True:
+            # card = pygame.image.load(f'images\cards\{card.show()}.png').convert()
+            # card = pygame.transform.scale(card, (SCALED_IMAGE_SIZE))
+            # screen.blit(card, (image_location[count]))
+
+            card.show(image_location[count], screen, SCALED_IMAGE_SIZE)
             pygame.display.flip()
 
             # if card.face_up == False:
