@@ -17,6 +17,7 @@ class Button():
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == True and self.clicked == False:
                 self.clicked = True
+                time.sleep(0.2)
                 print('Clicked')
                 action = True
             if pygame.mouse.get_pressed()[0] == False:
@@ -26,6 +27,9 @@ class Button():
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
+    
+    def hide(self, surface, bg_colour):
+        pygame.draw.rect(surface, bg_colour, self.rect) # covers button rectangle 
     
 def main():
     pass

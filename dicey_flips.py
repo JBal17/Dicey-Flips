@@ -51,7 +51,19 @@ def die_roll_animation(location):
         screen.blit(random.choice(die_roll_animation_list),(location))
         time.sleep(0.05)
         pygame.display.flip()
+
+
+# input hand, returns number of cards that are face up
         
+def check_face_up_cards(player_hand):
+    face_up_count = 0
+    for card in player_hand:
+        if card.face_up:
+            face_up_count += 1
+    return(face_up_count)
+
+
+#set P1 image locations
 image_location = []
 for i in range(6):
     image_location.append(((P1_INITIAL_IMAGE_LOCATION_X + (i * CARD_SPACING_X)), P1_IMAGE_LOCATION_Y))
@@ -79,40 +91,37 @@ def main():
         if deal_button.draw(screen):
             screen.fill(bg_colour) #clear existing cards before dealing new cards
             screen.blit(die_face,(P1_DIE_LOCATION))
-            for i in range(number_of_cards):
+            # for i in range(number_of_cards):
              # display discard buttons below cards - CAN'T CURRENTLY CLICK DISCARD BUTTON
-                discard_button = Button((P1_INITIAL_IMAGE_LOCATION_X + (SCALED_IMAGE_SIZE[0]/2) - 44) + (i * CARD_SPACING_X), (P1_IMAGE_LOCATION_Y + SCALED_IMAGE_SIZE[1] + 10), discard_image) #add discard button underneath each card
-                discard_button.draw(screen)
+                # discard_button = Button((P1_INITIAL_IMAGE_LOCATION_X + (SCALED_IMAGE_SIZE[0]/2) - 44) + (i * CARD_SPACING_X), (P1_IMAGE_LOCATION_Y + SCALED_IMAGE_SIZE[1] + 10), discard_image) #add discard button underneath each card
+                # discard_button.draw(screen)
             
             player1.hand = []
             pygame.display.flip()
             for i in range(number_of_cards):
                 if len(deck.deck) > 0:
                     player1.hand.append(deck.deal_card())
+        
+        player_1_discard_button = Button((P1_INITIAL_IMAGE_LOCATION_X + (SCALED_IMAGE_SIZE[0]/2) - 44), (P1_IMAGE_LOCATION_Y + SCALED_IMAGE_SIZE[1] + 10), discard_image) #add discard button underneath each card
+        # check number of cards that are face up
+        if check_face_up_cards(player1.hand) < 3 and len(player1.hand) > 0:
+            player_1_discard_button.draw(screen)
+
+        if check_face_up_cards(player1.hand) > 2 and len(player1.hand) > 0:
+            player_1_discard_button.hide(screen, bg_colour)
+
+
+        # face_up_count = 0
+        # for card in player1.hand:
+        #     if card.face_up:
+        #         face_up_count += 1
+        # print(face_up_count)
 
 
         #display card images for player hand
         for count, card in enumerate(player1.hand):
-            # # if card.face_up == True:
-            # card = pygame.image.load(f'images\cards\{card.show()}.png').convert()
-            # card = pygame.transform.scale(card, (SCALED_IMAGE_SIZE))
-            # screen.blit(card, (image_location[count]))
-
-            card.show(image_location[count], screen, SCALED_IMAGE_SIZE)
+            card.show(image_location[count], screen, SCALED_IMAGE_SIZE, bg_colour)
             pygame.display.flip()
-
-            # if card.face_up == False:
-            #     card = pygame.image.load(f'images\cards\card_back.jpg').convert()
-            #     card = pygame.transform.scale(card, (SCALED_IMAGE_SIZE))
-            #     screen.blit(card, (image_location[count]))
-            #     pygame.display.flip()
-
-
-        #display player hand
-        # for i in range(number_of_cards):
-        #      # show cards in hand
-        #     discard_button = Button((INITIAL_IMAGE_LOCATION_X + (SCALED_IMAGE_SIZE[0]/2) - 44) + (i * CARD_SPACING_X), (IMAGE_LOCATION_Y + SCALED_IMAGE_SIZE[1] + 10), discard_image) #add discard button underneath each card
-        #     discard_button.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

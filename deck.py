@@ -37,12 +37,14 @@ class Card:
         self.discard = False
         self.face_up = True
     
-    def show(self, position, surface, scale):
+    def show(self, position, surface, scale, bg_colour):
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.clicked = False
+        self.bg_colour = bg_colour
+        self.rect_moved = self.rect.move(0, -30)
 
-        pos = pygame.mouse.get_pos() #mouse position
+        pos = pygame.mouse.get_pos() # mouse position
 
         #check if card is clicked
         if self.rect.collidepoint(pos):
@@ -50,15 +52,20 @@ class Card:
                 self.clicked = True
                 print('Card Clicked')
                 time.sleep(0.2)
-                self.face_up = not self.face_up #swap between face up and face down when clicked
+                self.face_up = not self.face_up # swap between face up and face down when clicked
             if pygame.mouse.get_pressed()[0] == False:
                 self.clicked = False
         
         #draw card on screen
         if self.face_up == True:
-            surface.blit(self.image, (position)) #draw card face up
+            pygame.draw.rect(surface, bg_colour, self.rect_moved) # hide card in raised position
+            surface.blit(self.image, (position)) # draw card face up
         else:
-            surface.blit(self.card_back, (position)) #draw card face down
+            pygame.draw.rect(surface, bg_colour, self.rect) # hide card in original position
+            surface.blit(self.image, ((position[0]), position[1] - 25)) # draw card raised up
+            pygame.display.flip()
+
+            #surface.blit(self.card_back, (position)) #draw card face down
 
 
 class Player():
