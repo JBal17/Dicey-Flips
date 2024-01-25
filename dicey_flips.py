@@ -53,8 +53,12 @@ def die_roll_animation(location):
         pygame.display.flip()
 
 
+def show_player_cards(hand, location_list, surface, colour):
+    for count, card in enumerate(hand):
+        card.show(location_list[count], surface, colour)
+        pygame.display.flip()
+
 # input hand, returns number of cards that are face up
-        
 def check_face_up_cards(player_hand):
     face_up_count = 0
     for card in player_hand:
@@ -103,25 +107,38 @@ def main():
                     player1.hand.append(deck.deal_card())
         
         player_1_discard_button = Button((P1_INITIAL_IMAGE_LOCATION_X + (SCALED_IMAGE_SIZE[0]/2) - 44), (P1_IMAGE_LOCATION_Y + SCALED_IMAGE_SIZE[1] + 10), discard_image) #add discard button underneath each card
-        # check number of cards that are face up
+        
+        # check number of cards that are face up and display discard button
         if check_face_up_cards(player1.hand) < 3 and len(player1.hand) > 0:
-            player_1_discard_button.draw(screen)
+            if player_1_discard_button.draw(screen):
+                print('DISCARD')
+                while len(player1.hand) > 2:
+                    for card in player1.hand:
+                        if card.face_up == False:
+                            card.face_up = True
+                            player1.hand.remove(card)
+                            deck.deck.append(card)
+                deck.shuffle()
+
+                for card in deck.deck:
+                    card.print_card()
+
+                print(len(deck.deck))
+                screen.fill(bg_colour)
+                show_player_cards(player1.hand, image_location, screen, bg_colour)
+                pygame.display.update()
+
 
         if check_face_up_cards(player1.hand) > 2 and len(player1.hand) > 0:
             player_1_discard_button.hide(screen, bg_colour)
 
-
-        # face_up_count = 0
-        # for card in player1.hand:
-        #     if card.face_up:
-        #         face_up_count += 1
-        # print(face_up_count)
-
-
         #display card images for player hand
-        for count, card in enumerate(player1.hand):
-            card.show(image_location[count], screen, SCALED_IMAGE_SIZE, bg_colour)
-            pygame.display.flip()
+        show_player_cards(player1.hand, image_location, screen, bg_colour)
+
+
+        # for count, card in enumerate(player1.hand):
+        #     card.show(image_location[count], screen, SCALED_IMAGE_SIZE, bg_colour)
+        #     pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

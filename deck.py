@@ -36,8 +36,11 @@ class Card:
         self.card_back = pygame.transform.scale(pygame.image.load(f'images\cards\card_back.png').convert(), (100, 145.2))
         self.discard = False
         self.face_up = True
+
+    def print_card(self):
+        print(f'{self.value} of {self.suit}')
     
-    def show(self, position, surface, scale, bg_colour):
+    def show(self, position, surface, bg_colour):
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.clicked = False
@@ -60,9 +63,11 @@ class Card:
         if self.face_up == True:
             pygame.draw.rect(surface, bg_colour, self.rect_moved) # hide card in raised position
             surface.blit(self.image, (position)) # draw card face up
+            self.discard = False
         else:
             pygame.draw.rect(surface, bg_colour, self.rect) # hide card in original position
             surface.blit(self.image, ((position[0]), position[1] - 25)) # draw card raised up
+            self.discard = True
             pygame.display.flip()
 
             #surface.blit(self.card_back, (position)) #draw card face down
