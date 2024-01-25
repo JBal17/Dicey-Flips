@@ -9,7 +9,7 @@ suits = ['hearts', 'diamonds', 'clubs', 'spades']
 values = range(2,15)
 
 #create Deck class
-class Deck():
+class Deck:
     def __init__(self):
         self.deck = [] #empty list to be populated by deck.build
         self.build_deck() #build deck when creating class
@@ -72,16 +72,8 @@ class Card:
 
             #surface.blit(self.card_back, (position)) #draw card face down
 
-
-class Player():
-    def __init__(self):
-        self.hand = []
-
 def main():
     deck = Deck() #create a deck of cards
-
-
-    player1 = Player()
 
 
 if __name__ == "__main__":
